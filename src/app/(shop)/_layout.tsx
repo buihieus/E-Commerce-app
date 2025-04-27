@@ -26,7 +26,7 @@ const TabsLayout = () => {
                             paddingTop: 1, // Giảm padding để phù hợp với Android
                         },
                     }),
-                    headerShown: false,
+                    headerShown: false,// ẩn header mặc định của stack
                 }}
             >
                 <Tabs.Screen
@@ -34,7 +34,7 @@ const TabsLayout = () => {
                     options={{
                         title: "shop",
                         tabBarIcon: (props) => (
-                            <TabsBarIcon name="shopping-cart" {...props} />
+                            <TabsBarIcon name="shopping-cart" {...props} /> // ...props truyền tất cả các thuộc tính của props vào
                         ),
                     }}
                 />
