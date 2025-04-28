@@ -1,6 +1,7 @@
-import { Tabs } from "expo-router";
-import { StyleSheet, View, Platform } from "react-native";
+import { Redirect, Tabs } from "expo-router";
+import { StyleSheet, View, Platform, ActivityIndicator } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { useAuth } from "../../providers/auth-provider";
 
 function TabsBarIcon(props: {
     name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -10,6 +11,14 @@ function TabsBarIcon(props: {
 }
 
 const TabsLayout = () => {
+    const {session,mounting, user } = useAuth(); // Giả sử bạn có hook useAuth để lấy session và user từ context
+
+    if (mounting) return <ActivityIndicator/>
+    if (!session) {
+        return (
+            <Redirect href="/auth" />
+        );
+    }
     return (
         <View style={style.container}>
             <Tabs
