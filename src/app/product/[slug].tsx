@@ -1,9 +1,10 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { Redirect, Stack, useLocalSearchParams } from 'expo-router'
 import { useToast } from 'react-native-toast-notifications';
 import { PRODUCTS } from '../../../assets/products';
 import { useCartStore } from '../../store/cart-store';
+
 
 const ProductDetails = () => {
     const { slug } = useLocalSearchParams<{ slug: string }>();
@@ -15,7 +16,7 @@ const ProductDetails = () => {
     const { items, addItem, incrementItem, decrementItem } = useCartStore();
     const cartItem = items.find((item) => item.id === product.id);
     const initialQuantity = cartItem ? cartItem.quantity : 1;
-    const [quantity, setQuantity] = React.useState(initialQuantity);
+    const [quantity, setQuantity] = useState(initialQuantity);
 
     const increaseQuantity = () => { 
         if (quantity < product.maxQuantity) {
@@ -25,7 +26,7 @@ const ProductDetails = () => {
               toast.show('Cannot add more than maximum quantity', {
                 type: 'warning',
                 placement: 'top',
-                duration: 1500,
+                // duration: 1500,
               });
             }
     };

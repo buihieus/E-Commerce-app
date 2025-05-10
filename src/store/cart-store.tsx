@@ -3,7 +3,7 @@ import { create } from 'zustand';
 type CartItemType = {
   id: number;
   title: string;
-  heroImage: any; // // tạm thời cho phép image bị thiếu
+  heroImage: string;
   price: number;
   quantity: number;
   maxQuantity: number;

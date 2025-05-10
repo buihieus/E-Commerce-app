@@ -5,7 +5,7 @@ type CartItemType = {
 
   id: number;
   title: string;
-  image?: any; // tạm thời cho phép image bị thiếu
+  heroImage: any; // tạm thời cho phép image bị thiếu
   price: number;
   quantity: number;
 }
@@ -22,7 +22,7 @@ const CartItem = ({
   onRemove,
 }: CartItemProps) => {
   return <View style={styles.cartItem}>
-    <Image source={item.image} style={styles.itemImage} />
+    <Image source={item.heroImage} style={styles.itemImage} />
     <View style={styles.itemDetails}>
       <Text style={styles.itemTitle}>{item.title}</Text>
       <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
@@ -32,16 +32,17 @@ const CartItem = ({
           <Text style={styles.quantityButtonText}>-</Text>
         </TouchableOpacity>
 
-        <Text style = {styles.itemQuantity}>{item.quantity}</Text>
-        
+        <Text style={styles.itemQuantity}>{item.quantity}</Text>
+
         <TouchableOpacity onPress={() => onIncrement(item.id)} style={styles.quantityButton}>
           <Text style={styles.quantityButtonText}>+</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => onRemove(item.id)} style={styles.removeButton}>
-        <Text style={styles.removeButtonText}>Remove</Text>
-      </TouchableOpacity>
+
     </View>
+    <TouchableOpacity onPress={() => onRemove(item.id)} style={styles.removeButton}>
+      <Text style={styles.removeButtonText}>Remove</Text>
+    </TouchableOpacity>
   </View>
 }
 export default function Cart() {

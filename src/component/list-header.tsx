@@ -16,10 +16,10 @@ export const ListHeader = () => {
         <View style={styles.headerLeft}>
           <View style={styles.avatarContainer}>
             <Image
-              source={{ uri: 'https://via.placeholder.com/40' }}
+              source={require('../../assets/images/dell-2.jpg')}
               style={styles.avatarImage}
             />
-            <Text style={styles.avatarText}>Hello BUI CONG HIEU</Text>
+            <Text style={styles.avatarText}>BUI CONG HIEU</Text>
           </View>
         </View>
         <View style={styles.headerRight}>
