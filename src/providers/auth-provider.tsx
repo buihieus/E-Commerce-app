@@ -52,7 +52,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         })
     }, []);
     return (
-        <AuthContext.Provider value={{ session, user, mounting }}>
+        <AuthContext.Provider value={{ session,  mounting, user}}>
             {children}
         </AuthContext.Provider>
     )
