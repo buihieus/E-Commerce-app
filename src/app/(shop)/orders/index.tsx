@@ -1,26 +1,26 @@
-import { View, Text, StyleSheet, FlatList, Pressable, ListRenderItem } from "react-native";
-import { ORDERS } from "../../../../assets/orders";
-import { Order, OrderStatus } from "../../../../assets/types/order";
+import { View, Text, StyleSheet, FlatList, Pressable, ListRenderItem, ActivityIndicator } from "react-native";
 import { Link, Stack } from "expo-router";
+import { format } from "date-fns";
+import { Tables } from "../../../types/database.types";
+import { getMyOrders } from "../../../api/api";
 
-const  statusDisplayText : Record<OrderStatus, string> = {
-    Pending: 'Pending',
-    Completed: 'Completed',
-    Shipped: 'Shipped',
-    InTransit: 'In Transit',
-}
-const renderitem: ListRenderItem<Order> = ({ item }) =>
+
+const renderitem: ListRenderItem<Tables<'order'>> = ({ item }) =>
     <Link href={`/orders/${item.slug}`} asChild>
         <Pressable style={styles.orderContainer}>
-            <View style={styles.orderContainer}>
+            <View style={styles.orderContent}>
                 <View style={styles.orderDetailsContainer}>
-                    <Text style={styles.orderItem}>{item.item}</Text>
-                    <Text style={styles.orderDetails}>{item.details}</Text>
-                    <Text style={styles.orderDate}>{item.date}</Text>
+                    <Text style={styles.orderItem}>{item.slug}</Text>
+                    <Text style={styles.orderDetails}>{item.description}</Text>
+                    <Text style={styles.orderDate}>
+                        {format(new Date(item.created_at), 'dd/MM/yyyy')}
+                        {/* {format(new Date(item.created_at), 'MM dd, yyyy')} */}
+
+                        </Text>
                 </View>
                 <View style={[styles.statusBadge, styles[`statusBadge_${item.status}`]]}>
                     <Text style={styles.statusText}>
-                        {statusDisplayText[item.status]}
+                        {item.status.toUpperCase()}
                     </Text>
                 </View>
             </View>
@@ -28,11 +28,18 @@ const renderitem: ListRenderItem<Order> = ({ item }) =>
         </Pressable>
     </Link>
 const Orders = () => {
+    const {data:orders,error,isLoading} = getMyOrders();
+
+    if(isLoading) return <ActivityIndicator/>
+
+    if(error || !orders) return <Text>Error: {error?.message}</Text>;
+
+    if(!orders.length) return <Text style={{fontSize:16,color:'#555',textAlign:'center',padding:10,}}>No orders created yet</Text>;
     return (
         <View style={styles.container}>
             <Stack.Screen options={{ title: 'Orders' }} />
             <FlatList
-                data={ORDERS}
+                data={orders}
                 keyExtractor={item => item.id.toString()}
                 renderItem={renderitem}
             />
@@ -41,6 +48,7 @@ const Orders = () => {
 }
 
 export default Orders;
+// cái key dong duoi de fix loi dong 15
 const styles: { [key: string]: any } = StyleSheet.create({
     container: {
         flex: 1,

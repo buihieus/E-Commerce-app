@@ -1,13 +1,14 @@
 import { View, Text, StyleSheet, Alert, Platform, TouchableOpacity, FlatList, Image } from "react-native";
 import { useCartStore } from "../store/cart-store";
 import { StatusBar } from "expo-status-bar";
+import { createOrder, createOrderItem } from "../api/api";
 type CartItemType = {
-
   id: number;
   title: string;
-  heroImage: any; // tạm thời cho phép image bị thiếu
+  heroImage: string; 
   price: number;
   quantity: number;
+  maxQuantity: number;
 }
 type CartItemProps = {
   item: CartItemType;
@@ -22,7 +23,7 @@ const CartItem = ({
   onRemove,
 }: CartItemProps) => {
   return <View style={styles.cartItem}>
-    <Image source={item.heroImage} style={styles.itemImage} />
+    <Image source={{ uri: item.heroImage }} style={styles.itemImage} />
     <View style={styles.itemDetails}>
       <Text style={styles.itemTitle}>{item.title}</Text>
       <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
@@ -46,11 +47,39 @@ const CartItem = ({
   </View>
 }
 export default function Cart() {
-  const { items, removeItem, incrementItem, decrementItem, getTotalPrice }
+  const { items, removeItem, incrementItem, decrementItem, getTotalPrice,resetCart }
     = useCartStore();
 
-  const handleCheckout = () => {
-    Alert.alert("proceed to checkout", `Total amount: $${getTotalPrice()}`);
+  const {mutateAsync: createSupabaseOrder} = createOrder();
+  const {mutateAsync: createSupabaseOrderItem} = createOrderItem();
+
+
+  const handleCheckout = async () => {
+    const totalPrice = parseFloat(getTotalPrice());
+    try {
+      await createSupabaseOrder(
+        { totalPrice },
+        {
+          onSuccess: data => {
+            createSupabaseOrderItem(
+              items.map(item => ({
+                orderId: data.id,
+                productId: item.id,
+                quantity: item.quantity,
+              })),
+              {
+                onSuccess: () => {
+                  alert('Order created successfully');
+                  resetCart();
+                },
+              }
+            );
+          },
+        }
+      );
+    } catch (error) {
+      alert('an error occurred while creating order');
+    }
   }
   return (
     <View style={styles.container}>
