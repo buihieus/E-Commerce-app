@@ -73,4 +73,4 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
         persistSession: true,
         detectSessionInUrl: false,
     },
-});
+})

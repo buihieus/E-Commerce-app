@@ -1,4 +1,3 @@
-
 import { View, Text, StyleSheet, Image, ImageBackground, TextInput, TouchableOpacity } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import * as zod from "zod";
